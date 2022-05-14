@@ -1,0 +1,22 @@
+{
+  "name": "ya-like-jazz",
+  "version": "1.0.0",
+  "description": "Private Music Bot (DON'T TELL GOOGLE)",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Thomas",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/builders": "^0.6.0",
+    "@discordjs/rest": "^0.1.0-canary.0",
+    "@discordjs/voice": "^0.6.0",
+    "discord-api-types": "^0.23.1",
+    "discord.js": "^13.6.0",
+    "libsodium-wrappers": "^0.7.9",
+    "yt-search": "^2.10.3",
+    "ytdl-core": "^4.10.1",
+    "ytsearcher": "^1.2.4"
+  }
+}
