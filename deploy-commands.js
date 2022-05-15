@@ -7,7 +7,7 @@ const commands = [
     new SlashCommandBuilder().setName('start')
 		.setDescription('Play the song OR resume previous song'),
 
-	new SlashCommandBuilder().setName('pause')
+	new SlashCommandBuilder().setName('wait')
 		.setDescription('Pause the song'),
 
 	new SlashCommandBuilder().setName('stop')
@@ -16,7 +16,7 @@ const commands = [
 	new SlashCommandBuilder().setName('continue')
 		.setDescription('Resume a paused song'),
 
-	new SlashCommandBuilder().setName('switch')
+	new SlashCommandBuilder().setName('finale')
 		.setDescription('Switch between instrumental and vocal tracks'),
 
 ]

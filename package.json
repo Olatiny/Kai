@@ -1,8 +1,8 @@
 {
-  "name": "ya-like-jazz",
+  "name": "kai",
   "version": "1.0.0",
   "description": "Private Music Bot (DON'T TELL GOOGLE)",
-  "main": "main.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,7 +13,7 @@
     "@discordjs/rest": "^0.1.0-canary.0",
     "@discordjs/voice": "^0.6.0",
     "discord-api-types": "^0.23.1",
-    "discord.js": "^13.6.0",
+    "discord.js": "^13.7.0",
     "libsodium-wrappers": "^0.7.9",
     "yt-search": "^2.10.3",
     "ytdl-core": "^4.10.1",
