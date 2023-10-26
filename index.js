@@ -1,25 +1,25 @@
 // Require the necessary discord.js classes
 const { Client, Intents, MessageButton, MessageActionRow, MessageEmbed, VoiceChannel, Message } = require('discord.js');
-const { joinVoiceChannel, createAudioPlayer, createAudioResource, VoiceConnectionStatus, VoiceConnectionState, getVoiceConnection, VoiceConnection, PlayerSubscription, NoSubscriberBehavior, DiscordStream, AudioPlayerStatus } = require('@discordjs/voice');
+const { joinVoiceChannel, createAudioPlayer, createAudioResource, VoiceConnectionStatus, VoiceConnectionState, getVoiceConnection, VoiceConnection, PlayerSubscription, NoSubscriberBehavior, DiscordStream, AudioPlayerStatus, StreamType } = require('@discordjs/voice');
 const { token, YTkey } = require('./config.json');
 
 // Create a new client instance
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES]});
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
 
-const nightmareBeginningPath = "./Audios/YBN with intro.mp3";
-const nightmareMiddlePath = "./Audios/YBN middle.mp3";
-const staticPath = "./Audios/YBN static.mp3";
-const finaleBeginningPath = "./Audios/finale_beginning.ogg";
-const finaleMiddlePath = "./Audios/finale_middle.mp3";
-const finaleLoopPath = "./Audios/finale_loop.mp3";
-const finaleEndPath = "./Audios/finale_end.mp3";
+const nightmareBeginningPath = "./Audios/JJK/Hyness Intro.ogg";
+const nightmareMiddlePath = "./Audios/JJK/Hyness Phase 1.ogg";
+const staticPath = "./Audios/JJK/Hyness Phase 2 Transition.ogg";
+const finaleBeginningPath = "./Audios/JJK/Hyness Phase 2.ogg";
+const finaleMiddlePath = "./Audios/JJK/Hyness Phase 2.ogg";
+const finaleLoopPath = "./Audios/JJK/Hyness Phase 2.ogg";
+const finaleEndPath = "./Audios/JJK/Hyness End.ogg";
 
 /**
  * When the client is ready, run this code (only once)
  */
- client.once('ready', () => {
-	console.log('Ready!');
-    client.user.setPresence({activities: [{name: "you", type: "WATCHING"}]});
+client.once('ready', () => {
+    console.log('Ready!');
+    client.user.setPresence({ activities: [{ name: "you", type: "WATCHING" }] });
 });
 
 const player = createAudioPlayer({
@@ -36,10 +36,10 @@ let finaleFlag = false;
 let nextState = "beginning";
 let staticFlag = false;
 
-let addListener = function() {
+let addListener = function () {
     if (!hasListener) {
         hasListener = true;
-        
+
         /**
          * Defines behavior for when the players reach the end of their audio sources.
          * Depending on if the player was stopped, it ether pauses them immediately after
@@ -67,6 +67,7 @@ let addListener = function() {
                                 metadata: {
                                     title: "finale",
                                 },
+                                inputType: StreamType.OggOpus
                             });
 
                             player.play(source);
@@ -79,6 +80,7 @@ let addListener = function() {
                                 metadata: {
                                     title: "finale",
                                 },
+                                inputType: StreamType.OggOpus
                             });
 
                             player.play(source);
@@ -89,7 +91,7 @@ let addListener = function() {
                         }
                     } else {
                         player.stop();
-                        
+
                         if (connection.state.status != VoiceConnectionStatus.Destroyed) {
                             connection.destroy();
                         }
@@ -115,8 +117,9 @@ let addListener = function() {
                             metadata: {
                                 title: "static",
                             },
+                            inputType: StreamType.OggOpus
                         });
-            
+
                         player.play(static);
 
                         console.log("finale static");
@@ -125,6 +128,7 @@ let addListener = function() {
                             metadata: {
                                 title: "finale",
                             },
+                            inputType: StreamType.OggOpus
                         });
 
                         player.play(source);
@@ -135,6 +139,7 @@ let addListener = function() {
                     source = createAudioResource(nightmareMiddlePath, {
                         metadata: {
                             title: "Your Best Nightmare",
+                            inputType: StreamType.OggOpus
                         },
                     });
 
@@ -146,7 +151,7 @@ let addListener = function() {
         });
 
         connection.on(VoiceConnectionStatus.Disconnected, async () => {
-            if (!stopFlag) {    
+            if (!stopFlag) {
                 await currChannel.send("Peace ;)");
 
                 stopFlag = true;
@@ -165,12 +170,12 @@ let addListener = function() {
                 console.log('exiting');
             }
         });
-    }        
-    
+    }
+
 }
 
 client.on("interactionCreate", async interaction => {
-    const {commandName} = interaction;
+    const { commandName } = interaction;
 
     var voice_id = interaction.guild.members.cache.get(interaction.member.user.id).voice.channelId;
     var guild_id = interaction.guildId;
@@ -212,11 +217,12 @@ client.on("interactionCreate", async interaction => {
                 metadata: {
                     title: "Your Best nightmare",
                 },
+                inputType: StreamType.OggOpus
             });
 
             player.play(source);
             playing = true;
-            
+
             console.log('playing');
         }
     } else if (commandName === 'finale') {
@@ -237,6 +243,7 @@ client.on("interactionCreate", async interaction => {
             metadata: {
                 title: "static",
             },
+            inputType: StreamType.OggOpus
         });
 
         player.play(static);
@@ -310,6 +317,7 @@ client.on("interactionCreate", async interaction => {
                 metadata: {
                     title: "finale",
                 },
+                inputType: StreamType.OggOpus
             });
 
             player.play(source);
@@ -320,6 +328,7 @@ client.on("interactionCreate", async interaction => {
                 metadata: {
                     title: "static",
                 },
+                inputType: StreamType.OggOpus
             });
 
             player.play(static);
