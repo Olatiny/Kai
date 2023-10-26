@@ -6,13 +6,13 @@ const { token, YTkey } = require('./config.json');
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
 
-const nightmareBeginningPath = "./Audios/JJK/Hyness Intro.ogg";
-const nightmareMiddlePath = "./Audios/JJK/Hyness Phase 1.ogg";
-const staticPath = "./Audios/JJK/Hyness Phase 2 Transition.ogg";
-const finaleBeginningPath = "./Audios/JJK/Hyness Phase 2.ogg";
-const finaleMiddlePath = "./Audios/JJK/Hyness Phase 2.ogg";
-const finaleLoopPath = "./Audios/JJK/Hyness Phase 2.ogg";
-const finaleEndPath = "./Audios/JJK/Hyness End.ogg";
+const nightmareBeginningPath = "./Audios/JJK/Hyness Intro.mp3";
+const nightmareMiddlePath = "./Audios/JJK/Hyness Phase 1.mp3";
+const staticPath = "./Audios/JJK/Hyness Phase 2 Transition.mp3";
+const finaleBeginningPath = "./Audios/JJK/Hyness Phase 2.mp3";
+const finaleMiddlePath = "./Audios/JJK/Hyness Phase 2.mp3";
+const finaleLoopPath = "./Audios/JJK/Hyness Phase 2.mp3";
+const finaleEndPath = "./Audios/JJK/Hyness End.mp3";
 
 /**
  * When the client is ready, run this code (only once)
@@ -67,7 +67,7 @@ let addListener = function () {
                                 metadata: {
                                     title: "finale",
                                 },
-                                inputType: StreamType.OggOpus
+                                // inputType: StreamType.OggOpus
                             });
 
                             player.play(source);
@@ -80,7 +80,7 @@ let addListener = function () {
                                 metadata: {
                                     title: "finale",
                                 },
-                                inputType: StreamType.OggOpus
+                                // inputType: StreamType.OggOpus
                             });
 
                             player.play(source);
@@ -117,7 +117,7 @@ let addListener = function () {
                             metadata: {
                                 title: "static",
                             },
-                            inputType: StreamType.OggOpus
+                            // inputType: StreamType.OggOpus
                         });
 
                         player.play(static);
@@ -128,7 +128,7 @@ let addListener = function () {
                             metadata: {
                                 title: "finale",
                             },
-                            inputType: StreamType.OggOpus
+                            // inputType: StreamType.OggOpus
                         });
 
                         player.play(source);
@@ -139,7 +139,7 @@ let addListener = function () {
                     source = createAudioResource(nightmareMiddlePath, {
                         metadata: {
                             title: "Your Best Nightmare",
-                            inputType: StreamType.OggOpus
+                            // inputType: StreamType.OggOpus
                         },
                     });
 
@@ -170,6 +170,19 @@ let addListener = function () {
                 console.log('exiting');
             }
         });
+
+        // const networkStateChangeHandler = (oldNetworkState, newNetworkState) => {
+        //     const newUdp = Reflect.get(newNetworkState, 'udp');
+        //     clearInterval(newUdp?.keepAliveInterval);
+        // }
+
+        // connection.on('stateChange', (oldState, newState) => {
+        //     const oldNetworking = Reflect.get(oldState, 'networking');
+        //     const newNetworking = Reflect.get(newState, 'networking');
+
+        //     oldNetworking?.off('stateChange', networkStateChangeHandler);
+        //     newNetworking?.on('stateChange', networkStateChangeHandler);
+        // });
     }
 
 }
@@ -217,7 +230,7 @@ client.on("interactionCreate", async interaction => {
                 metadata: {
                     title: "Your Best nightmare",
                 },
-                inputType: StreamType.OggOpus
+                // inputType: StreamType.OggOpus
             });
 
             player.play(source);
@@ -243,7 +256,7 @@ client.on("interactionCreate", async interaction => {
             metadata: {
                 title: "static",
             },
-            inputType: StreamType.OggOpus
+            // inputType: StreamType.OggOpus
         });
 
         player.play(static);
@@ -317,7 +330,7 @@ client.on("interactionCreate", async interaction => {
                 metadata: {
                     title: "finale",
                 },
-                inputType: StreamType.OggOpus
+                // inputType: StreamType.OggOpus
             });
 
             player.play(source);
@@ -328,7 +341,7 @@ client.on("interactionCreate", async interaction => {
                 metadata: {
                     title: "static",
                 },
-                inputType: StreamType.OggOpus
+                // inputType: StreamType.OggOpus
             });
 
             player.play(static);
