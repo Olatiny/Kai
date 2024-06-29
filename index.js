@@ -195,7 +195,7 @@ client.on("interactionCreate", async interaction => {
     var currChannel = interaction.channel;
 
     if (!voice_id) {
-        return interaction.reply("Still doing prep...");
+        return interaction.reply("Sorry, I'm not here just yet... but I can be shortly :)");
     }
 
     connection = joinVoiceChannel({
@@ -218,7 +218,7 @@ client.on("interactionCreate", async interaction => {
 
             player.unpause;
         } else {
-            await interaction.reply('Time to show my potential!');
+            await interaction.reply("Can't wait to make some new friends!");
 
             if (!connection) {
                 console.log(":(");
@@ -240,14 +240,14 @@ client.on("interactionCreate", async interaction => {
         }
     } else if (commandName === 'finale') {
         if (stopFlag) {
-            await interaction.reply("Shut up!");
+            await interaction.reply("Out of cursed energy :( What if we got Ice cream instead!");
 
             console.log("tried to switch to finale too early");
 
             return;
         }
 
-        await interaction.reply("You don't even know half of what I'm capable of...");
+        await interaction.reply("Domain Expansion. Funhouse Fantasy: Command Terminal.");
 
         staticFlag = true;
         finaleFlag = true;
@@ -262,7 +262,7 @@ client.on("interactionCreate", async interaction => {
         player.play(static);
     } else if (commandName === 'wait') {
         if (stopFlag) {
-            await interaction.reply("We haven't even started yet...");
+            await interaction.reply("Sorry, I'm not here just yet... but I can be shortly :)");
 
             console.log('didn\'t do anything');
 
@@ -270,14 +270,14 @@ client.on("interactionCreate", async interaction => {
         }
 
         if (player.state.status === 'paused') {
-            await interaction.reply("I already stopped, what more do you want?");
+            await interaction.reply("Woah there, we're still in time out!");
 
             console.log("did not pause");
         } else {
             if (finaleFlag) {
-                await interaction.reply("I think I'm gonna puke...");
+                await interaction.reply("Time out!");
             } else {
-                await interaction.reply("Disgusting...");
+                await interaction.reply("Time out!");
             }
 
             player.pause();
@@ -287,9 +287,9 @@ client.on("interactionCreate", async interaction => {
     } else if (commandName === 'continue') {
         if (player.state.status === 'paused') {
             if (finaleFlag) {
-                await interaction.reply("Just fight me!");
+                await interaction.reply("Okay, we're good :)");
             } else {
-                await interaction.reply("Let's finish this clean up.");
+                await interaction.reply("Okay, we're good :)");
             }
 
             player.unpause();
@@ -297,16 +297,16 @@ client.on("interactionCreate", async interaction => {
             console.log("unpausing");
         } else {
             if (finaleFlag) {
-                await interaction.reply("I'm not done yet!");
+                await interaction.reply("Aww, don't stop yet!");
             } else {
-                await interaction.reply("Where do you think you're going?!");
+                await interaction.reply("Aww, don't stop yet!");
             }
 
             console.log("did not unpause");
         }
     } else if (commandName === 'stop') {
         if (stopFlag) {
-            await interaction.reply("Nothing's even happening...");
+            await interaction.reply("Don't call quits! Maybe some chocolate ice cream will cheer you up?");
 
             console.log("tried to leave when haven't joined.");
 
@@ -314,9 +314,9 @@ client.on("interactionCreate", async interaction => {
         }
 
         if (finaleFlag) {
-            await interaction.reply("Just... Shut up...");
+            await interaction.reply("You're strong! But we should have more fun later... I'm getting tired haha!");
         } else {
-            await interaction.reply("Stop talking!");
+            await interaction.reply("You're strong! But we should have more fun later... I'm getting tired haha!");
         }
 
         stopFlag = true;
