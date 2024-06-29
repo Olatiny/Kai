@@ -6,13 +6,13 @@ const { token, YTkey } = require('./config.json');
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
 
-const nightmareBeginningPath = "./Audios/JJK/Hyness Intro.mp3";
-const nightmareMiddlePath = "./Audios/JJK/Hyness Phase 1.mp3";
-const staticPath = "./Audios/JJK/Hyness Phase 2 Transition.mp3";
-const finaleBeginningPath = "./Audios/JJK/Hyness Phase 2.mp3";
-const finaleMiddlePath = "./Audios/JJK/Hyness Phase 2.mp3";
-const finaleLoopPath = "./Audios/JJK/Hyness Phase 2.mp3";
-const finaleEndPath = "./Audios/JJK/Hyness End.mp3";
+const nightmareBeginningPath = "./Audios/Heartbeat/heartbeat.wav";
+const nightmareMiddlePath = "./Audios/Heartbeat/heartbeat.wav";
+const transitionPath = "./Audios/Heartbeat/heartbeat.wav";
+const finaleBeginningPath = "./Audios/Heartbeat/heartbeat.wav";
+const finaleMiddlePath = "./Audios/Heartbeat/heartbeat.wav";
+const finaleLoopPath = "./Audios/Heartbeat/heartbeat.wav";
+const finaleEndPath = "./Audios/Heartbeat/heartbeat.wav";
 
 /**
  * When the client is ready, run this code (only once)
@@ -34,7 +34,7 @@ let stopFlag = true;
 let connection = null;
 let finaleFlag = false;
 let nextState = "beginning";
-let staticFlag = false;
+let transitionFlag = false;
 
 let addListener = function () {
     if (!hasListener) {
@@ -55,12 +55,12 @@ let addListener = function () {
                     hasListener = false;
                     finaleFlag = false;
                     nextState = "beginning";
-                    staticFlag = false;
+                    transitionFlag = false;
                     console.log("stopped");
                     return;
                 }
 
-                if (staticFlag) {
+                if (transitionFlag) {
                     if (finaleFlag) {
                         if (nextState == "beginning") {
                             source = createAudioResource(finaleBeginningPath, {
@@ -100,24 +100,23 @@ let addListener = function () {
                         hasListener = false;
                         finaleFlag = false;
                         nextState = "beginning";
-                        staticFlag = false;
+                        transitionFlag = false;
 
                         console.log("stopping in static");
                     }
 
-                    staticFlag = false;
+                    transitionFlag = false;
                     return;
                 }
 
                 if (finaleFlag) {
                     if (nextState == "middle") {
-                        staticFlag = true;
+                        transitionFlag = true;
 
-                        static = createAudioResource(staticPath, {
+                        static = createAudioResource(transitionPath, {
                             metadata: {
                                 title: "static",
                             },
-                            // inputType: StreamType.OggOpus
                         });
 
                         player.play(static);
@@ -128,7 +127,6 @@ let addListener = function () {
                             metadata: {
                                 title: "finale",
                             },
-                            // inputType: StreamType.OggOpus
                         });
 
                         player.play(source);
@@ -139,7 +137,6 @@ let addListener = function () {
                     source = createAudioResource(nightmareMiddlePath, {
                         metadata: {
                             title: "Your Best Nightmare",
-                            // inputType: StreamType.OggOpus
                         },
                     });
 
@@ -161,7 +158,7 @@ let addListener = function () {
 
                 finaleFlag = false;
                 nextState = "beginning";
-                staticFlag = false;
+                transitionFlag = false;
 
                 if (connection.state.status != VoiceConnectionStatus.Destroyed) {
                     connection.destroy();
@@ -170,19 +167,6 @@ let addListener = function () {
                 console.log('exiting');
             }
         });
-
-        // const networkStateChangeHandler = (oldNetworkState, newNetworkState) => {
-        //     const newUdp = Reflect.get(newNetworkState, 'udp');
-        //     clearInterval(newUdp?.keepAliveInterval);
-        // }
-
-        // connection.on('stateChange', (oldState, newState) => {
-        //     const oldNetworking = Reflect.get(oldState, 'networking');
-        //     const newNetworking = Reflect.get(newState, 'networking');
-
-        //     oldNetworking?.off('stateChange', networkStateChangeHandler);
-        //     newNetworking?.on('stateChange', networkStateChangeHandler);
-        // });
     }
 
 }
@@ -195,7 +179,7 @@ client.on("interactionCreate", async interaction => {
     var currChannel = interaction.channel;
 
     if (!voice_id) {
-        return interaction.reply("Sorry, I'm not here just yet... but I can be shortly :)");
+        return interaction.reply("...");
     }
 
     connection = joinVoiceChannel({
@@ -210,15 +194,11 @@ client.on("interactionCreate", async interaction => {
         stopFlag = false;
 
         if (player.state.status === 'paused') {
-            if (finaleFlag) {
-                await interaction.reply('unpaused');
-            } else {
-                await interaction.reply('unpaused');
-            }
+            await interaction.reply('unpaused');
 
             player.unpause;
         } else {
-            await interaction.reply("Can't wait to make some new friends!");
+            await interaction.reply("...");
 
             if (!connection) {
                 console.log(":(");
@@ -238,31 +218,9 @@ client.on("interactionCreate", async interaction => {
 
             console.log('playing');
         }
-    } else if (commandName === 'finale') {
-        if (stopFlag) {
-            await interaction.reply("Out of cursed energy :( What if we got Ice cream instead!");
-
-            console.log("tried to switch to finale too early");
-
-            return;
-        }
-
-        await interaction.reply("Domain Expansion. Funhouse Fantasy: Command Terminal.");
-
-        staticFlag = true;
-        finaleFlag = true;
-
-        static = createAudioResource(staticPath, {
-            metadata: {
-                title: "static",
-            },
-            // inputType: StreamType.OggOpus
-        });
-
-        player.play(static);
     } else if (commandName === 'wait') {
         if (stopFlag) {
-            await interaction.reply("Sorry, I'm not here just yet... but I can be shortly :)");
+            await interaction.reply("...");
 
             console.log('didn\'t do anything');
 
@@ -270,15 +228,11 @@ client.on("interactionCreate", async interaction => {
         }
 
         if (player.state.status === 'paused') {
-            await interaction.reply("Woah there, we're still in time out!");
+            await interaction.reply("...");
 
             console.log("did not pause");
         } else {
-            if (finaleFlag) {
-                await interaction.reply("Time out!");
-            } else {
-                await interaction.reply("Time out!");
-            }
+            await interaction.reply("paused.")
 
             player.pause();
 
@@ -286,66 +240,30 @@ client.on("interactionCreate", async interaction => {
         }
     } else if (commandName === 'continue') {
         if (player.state.status === 'paused') {
-            if (finaleFlag) {
-                await interaction.reply("Okay, we're good :)");
-            } else {
-                await interaction.reply("Okay, we're good :)");
-            }
+            await interaction.reply("unpaused");
 
             player.unpause();
 
             console.log("unpausing");
         } else {
-            if (finaleFlag) {
-                await interaction.reply("Aww, don't stop yet!");
-            } else {
-                await interaction.reply("Aww, don't stop yet!");
-            }
-
+            await interaction.reply("...");
+ 
             console.log("did not unpause");
         }
-    } else if (commandName === 'stop') {
+    } else if (commandName === 'stop' || commandName === 'finale') {
         if (stopFlag) {
-            await interaction.reply("Don't call quits! Maybe some chocolate ice cream will cheer you up?");
+            await interaction.reply("...");
 
             console.log("tried to leave when haven't joined.");
 
             return;
         }
 
-        if (finaleFlag) {
-            await interaction.reply("You're strong! But we should have more fun later... I'm getting tired haha!");
-        } else {
-            await interaction.reply("You're strong! But we should have more fun later... I'm getting tired haha!");
-        }
+        await interaction.reply("...");
 
         stopFlag = true;
 
         console.log("stopping");
-
-        if (finaleFlag) {
-            staticFlag = false;
-
-            source = createAudioResource(finaleEndPath, {
-                metadata: {
-                    title: "finale",
-                },
-                // inputType: StreamType.OggOpus
-            });
-
-            player.play(source);
-        } else {
-            staticFlag = true;
-
-            static = createAudioResource(staticPath, {
-                metadata: {
-                    title: "static",
-                },
-                // inputType: StreamType.OggOpus
-            });
-
-            player.play(static);
-        }
     }
 });
 
