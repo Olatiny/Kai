@@ -6,13 +6,13 @@ const { token, YTkey } = require('./config.json');
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
 
-const nightmareBeginningPath = "./Audios/Heartbeat/heartbeat.wav";
-const nightmareMiddlePath = "./Audios/Heartbeat/heartbeat.wav";
-const transitionPath = "./Audios/Heartbeat/heartbeat.wav";
-const finaleBeginningPath = "./Audios/Heartbeat/heartbeat.wav";
-const finaleMiddlePath = "./Audios/Heartbeat/heartbeat.wav";
-const finaleLoopPath = "./Audios/Heartbeat/heartbeat.wav";
-const finaleEndPath = "./Audios/Heartbeat/heartbeat.wav";
+const nightmareBeginningPath = "./Audios/JJK2/Sniper.mp3";
+const nightmareMiddlePath = "./Audios/JJK2/Sniper.mp3";
+const transitionPath = "./Audios/JJK2/world end intro.mp3";
+const finaleBeginningPath = "./Audios/JJK2/world end loop.mp3";
+const finaleMiddlePath = "./Audios/JJK2/world end loop.mp3";
+const finaleLoopPath = "./Audios/JJK2/world end loop.mp3";
+const finaleEndPath = "./Audios/JJK2/world end loop.mp3";
 
 /**
  * When the client is ready, run this code (only once)
@@ -250,7 +250,7 @@ client.on("interactionCreate", async interaction => {
  
             console.log("did not unpause");
         }
-    } else if (commandName === 'stop' || commandName === 'finale') {
+    } else if (commandName === 'stop') {
         if (stopFlag) {
             await interaction.reply("...");
 
@@ -262,8 +262,29 @@ client.on("interactionCreate", async interaction => {
         await interaction.reply("...");
 
         stopFlag = true;
+        player.stop()
 
         console.log("stopping");
+    } else if (commandName === 'finale') {
+        if (stopFlag) {
+            await interaction.reply("");
+
+            console.log("tried to switch to finale too early");
+
+            return;
+        }
+
+        await interaction.reply("...");
+
+        finaleFlag = true;
+
+        static = createAudioResource(transitionPath, {
+            metadata: {
+                title: "static",
+            },
+        });
+
+        player.play(static);
     }
 });
 
