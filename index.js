@@ -22,18 +22,28 @@ const client = new Client({
 class Phase {
     constructor(loop_path)
     {
+        this.intro_path = loop_path;
         this.loop_path = loop_path;
-        
-        this.msg_play = "`HOLD ON TO YOUR [[silly strings]]!! EHEHEHE!`"
-        this.msg_pause = "`PLAYER(s)! EHAHEHAHEHAHEHUE. YOU THINK YOU CAN [[pause]] ME?`\n-# [[you can]]"
-        this.msg_resume = "`...WHERE DID YOU [[go]]... I'VE BEEN WAITING!!!`"
-        this.msg_next_phase = "`DID YOU KNOW ? IF YOU [[die]] YOU [[Level Up!]]! [[God]] TOLD ME! 100% [[antiques]] & [[Fact Checked By Real American Patriots]]`"
-        this.msg_stop = "## `WISHLIST [[apocalypse]] `[APPROACHES](<https://s.team/a/3581870>)` ON [[steam]] [[only!]] -200 Kromer`"
+
+        this.current_path = this.intro_path;
+
+        this.msg_play = "`HOLD ON TO YOUR [[silly strings]]!! EHEHEHE!`";
+        this.msg_pause = "`PLAYER(s)! EHAHEHAHEHAHEHUE. YOU THINK YOU CAN [[pause]] ME?`\n-# [[you can]]";
+        this.msg_resume = "`...WHERE DID YOU [[go]]... I'VE BEEN WAITING!!!`";
+        this.msg_next_phase = "`DID YOU KNOW ? IF YOU [[die]] YOU [[Level Up!]]! [[God]] TOLD ME! 100% [[antiques]] & [[Fact Checked By Real American Patriots]]`";
+        this.msg_stop = "## `WISHLIST [[apocalypse]] `[APPROACHES](<https://s.team/a/3581870>)` ON [[steam]] [[only!]] -200 Kromer`";
     
-        this.msg_havent_joined = "`PLAYER(s)! THIS [[Festival of Lights]] HASNT EVEN [[Gotten]]`"
-        this.msg_cant_do_next_phase = "`[[hyperlink blocked]]!! NO CHEATING, HEHEHE!`"
-        this.msg_already_paused = "`YOU ALREADY [[please make it stop, please...]] ME!!`"
-        this.msg_already_playing = "`PLAYER(s)! SLOW [[one small step]] THIS [[Non-stop Flight to]] HAS ALREADY [[Breaking]] ALREADY [[Bad]] ENOUGH!`"
+        this.msg_havent_joined = "`PLAYER(s)! THIS [[Festival of Lights]] HASNT EVEN [[Gotten]]`";
+        this.msg_cant_do_next_phase = "`[[hyperlink blocked]]!! NO CHEATING, HEHEHE!`";
+        this.msg_already_paused = "`YOU ALREADY [[please make it stop, please...]] ME!!`";
+        this.msg_already_playing = "`PLAYER(s)! SLOW [[one small step]] THIS [[Non-stop Flight to]] HAS ALREADY [[Breaking]] ALREADY [[Bad]] ENOUGH!`";
+    }
+
+    get_current_path()
+    {
+        let temp = this.current_path;
+        this.current_path = this.loop_path;
+        return temp;
     }
 }
 
@@ -41,10 +51,12 @@ class Phase {
 /** List of phases in bot */
 const phases = [
     new Phase("./Audios/JJK3/bull of hell - 1.ogg"),
-    new Phase("./Audios/JJK3/bull of hell - 2.ogg"),
+    new Phase("./Audios/JJK3/bull of hell - 2 - loop.ogg"),
     new Phase("./Audios/JJK3/urgot.ogg")
 ]
 
+phases[1].intro_path = "./Audios/JJK3/bull of hell - 2 - intro.ogg"
+phases[1].current_path = phases[1].intro_path
 
 phases[0].msg_next_phase = "`HOLY [[cow]] A NEW [[1]]?`"
 phases[2].msg_next_phase = "`...help...`"
@@ -202,10 +214,6 @@ let addListener = function ()
 
             reset_player()
 
-            if (connection.state.status != VoiceConnectionStatus.Destroyed) {
-                connection.destroy();
-            }
-
             console.log('exiting');
         }
     });
@@ -339,7 +347,7 @@ async function command_wait(interaction)
  */
 async function play_current_audio()
 {
-    let path = phases[phase_idx].loop_path
+    let path = phases[phase_idx].get_current_path()
             
     source = createAudioResource(path, {
         metadata: {
@@ -364,6 +372,7 @@ async function reset_player()
     connection.destroy();
     playing = false;
     hasListener = false;
+    phases[1].current_path = phases[1].intro_path
     phase_idx = 0
     transitionFlag = false;
     console.log("stopped");
