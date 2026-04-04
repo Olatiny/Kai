@@ -1,39 +1,42 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v9');
+const { REST, Routes } = require('discord.js');
 const { clientId, guildId, token } = require('./config.json');
 
+// Define your current commands
 const commands = [
-    new SlashCommandBuilder().setName('start')
-		.setDescription('Play the song OR resume previous song'),
+  new SlashCommandBuilder().setName('start').setDescription('Play the song OR resume previous song'),
+  new SlashCommandBuilder().setName('wait').setDescription('Pause the song'),
+  new SlashCommandBuilder().setName('stop').setDescription('Get bot to leave chat'),
+  new SlashCommandBuilder().setName('continue').setDescription('Resume a paused song'),
+  new SlashCommandBuilder().setName('next-phase').setDescription('progress to next phase'),
+].map(cmd => cmd.toJSON());
 
-	new SlashCommandBuilder().setName('wait')
-		.setDescription('Pause the song'),
+const rest = new REST({ version: '10' }).setToken(token);
 
-	new SlashCommandBuilder().setName('stop')
-		.setDescription('Get bot to leave chat'),
+(async () => {
+  try {
+    console.log('Fetching existing guild commands...');
+    const existingGuild = await rest.get(Routes.applicationGuildCommands(clientId, guildId));
 
-	new SlashCommandBuilder().setName('continue')
-		.setDescription('Resume a paused song'),
+    // Delete all guild commands
+    await Promise.all(existingGuild.map(cmd =>
+      rest.delete(`${Routes.applicationGuildCommands(clientId, guildId)}/${cmd.id}`)
+    ));
+    console.log('Old guild commands cleared.');
 
-	new SlashCommandBuilder().setName('finale')
-		.setDescription('Switch between instrumental and vocal tracks'),
+    console.log('Fetching existing global commands...');
+    const existingGlobal = await rest.get(Routes.applicationCommands(clientId));
 
-]
-	.map(command => command.toJSON());
+    // Delete all global commands
+    await Promise.all(existingGlobal.map(cmd =>
+      rest.delete(`${Routes.applicationCommands(clientId)}/${cmd.id}`)
+    ));
+    console.log('Old global commands cleared.');
 
-const rest = new REST({ version: '9' }).setToken(token);
-
-rest.put(Routes.applicationCommands(clientId), { body: commands })
-	.then(() => console.log('Successfully registered application commands.'))
-	.catch(console.error);
-
-// rest.get(Routes.applicationGuildCommands(clientId, guildId))
-// 	.then(data => {
-// 		const promises = [];
-// 		for (const command of data) {
-// 			const deleteUrl = `${Routes.applicationGuildCommands(clientId, guildId)}/${command.id}`;
-// 			promises.push(rest.delete(deleteUrl));
-// 		}
-// 		return Promise.all(promises);
-// 	});
+    // Deploy new commands to the guild (instant update)
+    await rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands });
+    console.log('New commands deployed successfully.');
+  } catch (error) {
+    console.error('Error deploying commands:', error);
+  }
+})();
